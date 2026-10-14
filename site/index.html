@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JNP 스튜디오</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1d2738; --paper:#f4efe4; --line:#cfc3a8; --accent:#b8452f; --gold:#c08a24; --muted:#7a7466; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+  header { background: var(--ink); color: var(--paper); padding: 40px 16px 34px; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding: 0; }
+  h1 { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: clamp(30px, 5vw, 44px); margin: 6px 0 8px; }
+  header p { margin: 0; color: #cfd4dc; }
+  .kicker { color: var(--gold); font-weight: 700; letter-spacing: .1em; font-size: 14px; }
+  .filter { margin: 26px 0 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter input[type=search] { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: #fffdf7; }
+  .filter label { display: flex; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); }
+  ul { list-style: none; padding: 0; margin: 0 0 60px; }
+  li { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center; padding: 16px 6px; border-bottom: 1px solid var(--line); }
+  li .no { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 22px; color: var(--muted); }
+  li .t { font-weight: 700; font-size: 18px; line-height: 1.4; }
+  li .s { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  li.ready .no { color: var(--accent); }
+  li a.t { color: var(--ink); text-decoration: none; }
+  li a.t:hover { text-decoration: underline; }
+  .badge { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #e8dfcb; color: var(--muted); white-space: nowrap; }
+  li.ready .badge { background: var(--ink); color: var(--paper); }
+  .help { font-size: 14px; color: var(--muted); line-height: 1.7; background: #fffdf7; border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 20px 0; }
+  kbd { background: #e8dfcb; border-radius: 3px; padding: 0 5px; font-family: inherit; }
+  @media (max-width: 560px) { li { grid-template-columns: 44px 1fr; } li .badge { grid-column: 2; justify-self: start; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="kicker">험난한 장기투자 · 유튜브 대본</div>
+    <h1>JNP 스튜디오</h1>
+    <p>배우고 나누는 사람, 선한 영향력을 믿는 JNP</p>
+  </div>
+</header>
+<main class="wrap">
+  <div class="help">
+    에피소드를 열면 왼쪽에 화면, 오른쪽에 대본이 나옵니다.
+    <kbd>→</kbd>/<kbd>Space</kbd>로 넘기고, <kbd>P</kbd>를 누르면 대본이 별도 창(발표자 창)으로 분리되어 메인 창은 화면만 남습니다. 녹화할 때는 메인 창을 <kbd>F</kbd>로 전체화면으로 띄우세요.
+  </div>
+  <div class="filter">
+    <input id="q" type="search" placeholder="제목·장으로 찾기">
+    <label><input id="readyOnly" type="checkbox"> 완성된 것만</label>
+  </div>
+  <ul id="list"></ul>
+</main>
+<script src="episodes.js"></script>
+<script>
+  const list = document.getElementById('list'), q = document.getElementById('q'), readyOnly = document.getElementById('readyOnly');
+  function draw() {
+    const term = q.value.trim();
+    list.innerHTML = '';
+    for (const ep of window.EPISODES) {
+      if (readyOnly.checked && !ep.file) continue;
+      if (term && !(ep.title + ep.source).includes(term)) continue;
+      const li = document.createElement('li');
+      li.className = ep.file ? 'ready' : '';
+      const no = String(ep.no).padStart(2, '0');
+      const title = ep.file ? `<a class="t" href="${ep.file}">${ep.title}</a>` : `<div class="t">${ep.title}</div>`;
+      li.innerHTML = `<div class="no">${no}</div><div>${title}<div class="s">${ep.source}</div></div><span class="badge">${ep.file ? '발표 준비 완료' : '준비 중'}</span>`;
+      list.appendChild(li);
+    }
+  }
+  q.addEventListener('input', draw);
+  readyOnly.addEventListener('change', draw);
+  draw();
+</script>
+</body>
+</html>
