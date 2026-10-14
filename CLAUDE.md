@@ -18,6 +18,9 @@ Claude의 주 업무:
 | `references/jamtoori/*.md` | 잼투리 영상 자막(YouTube 자동 생성 자막이라 오타 많음). 스타일 참고용 |
 | `scripts/` | 완성한 대본. 파일명 형식: `scripts/EP{번호}_{원고위치}_{키워드}.md` |
 | `site/` | 녹화용 발표 사이트. `site/index.html`을 브라우저로 바로 열면 된다(서버 불필요) |
+| `.github/workflows/pages.yml` | `site/`만 GitHub Pages로 배포한다. main에 `site/` 변경이 푸시되면 자동 실행되고, 결과는 https://jay-nuclear-phd.github.io/jay-youtube/ 에 뜬다 |
+
+- 저장소는 **공개(public)**다. 출간 전 원고까지 모두 공개된다는 점을 JNP가 알고 선택했다. 비밀번호, 계좌번호, 부대 정보 같은 민감한 정보는 저장소에 넣지 않는다.
 
 ### 발표 사이트 (`site/`)
 
